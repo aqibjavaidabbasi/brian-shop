@@ -49,7 +49,11 @@ export default function ProductView({ design, initialColour = 0 }) {
     <div className="pdp">
       <div className="gallery">
         <div className="gallery-main">
-          <img src={img(main, 1200)} alt={`${design.name} in ${colourway.label}`} />
+          <img
+            src={img(main, 1200)}
+            srcSet={`${img(main, 600)} 600w, ${img(main, 900)} 900w, ${img(main, 1200)} 1200w`}
+            sizes="(max-width: 860px) 100vw, 55vw"
+            alt={`${design.name} in ${colourway.label}`} />
         </div>
 
         {many && (

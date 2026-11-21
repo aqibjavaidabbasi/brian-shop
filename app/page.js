@@ -2,17 +2,32 @@ import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
 import { CATEGORIES, designsIn, cardData, img } from '@/lib/catalog';
 
-const HERO = 'https://www.axcelsports.com/cdn/shop/files/Blog_Banner_for_Website_Content.png?width=2000';
+const HERO_BASE = 'https://www.axcelsports.com/cdn/shop/files/Blog_Banner_for_Website_Content.png?v=1';
+const HERO = HERO_BASE + '&width=1440';
 
 export default function Home() {
   const featured = ['sfi-suits', 'powerboat-suits', 'drag-racing-suits', 'karting-suits']
     .flatMap((c) => designsIn(c).slice(0, 2))
     .slice(0, 8);
-  const tiles = CATEGORIES.map((c) => ({ ...c, image: designsIn(c.slug)[0]?.colourways[0]?.images[0] }));
+  // Use a real product photo for each tile, skipping placeholder graphics.
+  const photo = (slug) =>
+    designsIn(slug)
+      .flatMap((d) => d.colourways.map((c) => c.images[0]))
+      .find((src) => src && !/\/AXCEL_\d+\./i.test(src));
+  const tiles = CATEGORIES.map((c) => ({ ...c, image: photo(c.slug) }));
   return (
     <>
       <section className="hero">
-        <img className="hero-img" src={HERO} alt="Driver in an Axcel race suit at the track" />
+        <img
+          className="hero-img"
+          src={HERO}
+          srcSet={`${HERO_BASE}&width=960 960w, ${HERO_BASE}&width=1440 1440w, ${HERO_BASE}&width=2000 2000w`}
+          sizes="100vw"
+          width="1920"
+          height="1080"
+          fetchPriority="high"
+          alt="Driver in an Axcel race suit at the track"
+        />
         <div className="hero-text">
           <h1>
             Your passion

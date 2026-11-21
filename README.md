@@ -31,3 +31,40 @@ npm run dev
 
 - Colour circle names come from the codes in the product titles or image file names (for example "BFY"). Listings with no code show "Colour 1", "Colour 2" and so on.
 - Prices, options and descriptions are the live store's, unchanged.
+
+## Adding Brian's prices, images and text
+
+Everything Brian sends goes into `data/overrides.json`, keyed by the design's URL slug (the part after `/products/`). Then rebuild.
+
+```json
+{
+  "colourCodes": { "B": "Black", "W": "White", "R": "Red", "FY": "Fluo Yellow", "FG": "Fluo Green" },
+  "designs": {
+    "sfi-axcel-bratos-suit": {
+      "priceIncrease": 25,
+      "description": "<p>Brian's new text for this suit</p>",
+      "colours": {
+        "BG": { "name": "Black / Neon Green", "images": ["https://cdn.shopify.com/.../bratos-bg-front.png"] }
+      },
+      "colourOrder": ["Black / Neon Green", "Black / Orange"]
+    },
+    "sfi-axcel-molenaar-suit": { "price": 249.95 },
+    "sfi-axcel-proton-suit": { "prices": { "Adult M": 259.95, "Youth S": 219.95 } },
+    "some-old-design": { "hide": true }
+  }
+}
+```
+
+- `colourCodes`: turns codes like `BFYW` into "Black / Fluo Yellow / White" on every product. Codes it can't fully read stay as they are.
+- `price` sets one price for the whole design. `prices` sets a price per option value (for example per size or layer). `priceIncrease` adds an amount to the current prices.
+- `description` replaces the product text (HTML).
+- `colours` renames a colour and/or swaps in new images for it, using the colour's current label.
+- `hide` removes a design from the shop.
+
+Note: these changes are for the preview only. Prices charged at checkout come from Shopify, so the same prices must be set in the Shopify admin.
+
+## SEO and speed
+
+- Every page has a title, description, canonical URL and share image. Product pages include Product structured data (price range, colours, stock).
+- `/sitemap.xml` and `/robots.txt` are generated. Set `NEXT_PUBLIC_SITE_URL` in Vercel to the live domain so their links are correct.
+- All pages are pre-built as static HTML. Images come from Shopify's CDN at the size each screen needs, and the hero image loads first.
