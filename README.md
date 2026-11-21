@@ -68,3 +68,4 @@ Note: these changes are for the preview only. Prices charged at checkout come fr
 - Every page has a title, description, canonical URL and share image. Product pages include Product structured data (price range, colours, stock).
 - `/sitemap.xml` and `/robots.txt` are generated. Set `NEXT_PUBLIC_SITE_URL` in Vercel to the live domain so their links are correct.
 - All pages are pre-built as static HTML. Images come from Shopify's CDN at the size each screen needs, and the hero image loads first.
+# brian-shop
