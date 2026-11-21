@@ -1,0 +1,53 @@
+import Link from 'next/link';
+import ProductCard from '@/components/ProductCard';
+import { CATEGORIES, designsIn, cardData, img } from '@/lib/catalog';
+
+const HERO = 'https://www.axcelsports.com/cdn/shop/files/Blog_Banner_for_Website_Content.png?width=2000';
+
+export default function Home() {
+  const featured = ['sfi-suits', 'powerboat-suits', 'drag-racing-suits', 'karting-suits']
+    .flatMap((c) => designsIn(c).slice(0, 2))
+    .slice(0, 8);
+  const tiles = CATEGORIES.map((c) => ({ ...c, image: designsIn(c.slug)[0]?.colourways[0]?.images[0] }));
+  return (
+    <>
+      <section className="hero">
+        <img className="hero-img" src={HERO} alt="Driver in an Axcel race suit at the track" />
+        <div className="hero-text">
+          <h1>
+            Your passion
+            <br />
+            drives us to
+            <br />
+            <span>Axcel</span>
+          </h1>
+          <p>Custom &amp; Off the Rack, Auto, Moto &amp; Powerboat Racing Suits, Accessories and Teamwear.</p>
+          <Link href="/shop/sfi-suits" className="btn-primary">
+            Shop racing suits
+          </Link>
+        </div>
+      </section>
+
+      <section className="container section">
+        <h2>Shop by category</h2>
+        <div className="tiles">
+          {tiles.map((t) => (
+            <Link key={t.slug} href={`/shop/${t.slug}`} className="tile">
+              {t.image && <img src={img(t.image, 500)} alt="" loading="lazy" />}
+              <span>{t.name}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="container section">
+        <h2>Featured suits</h2>
+        <div className="grid">
+          {featured.map((d) => (
+            <ProductCard key={d.slug} design={cardData(d)} />
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}
